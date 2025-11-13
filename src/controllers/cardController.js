@@ -41,7 +41,7 @@ export const createCard = async (req, res) => {
         const createdCard = new cardModel({ logo, name, description, isActive })
         await createdCard.save({ session })
         await session.commitTransaction()
-        res.status(200).json({ success: true, data: { createdCard }, message: 'Card successfully created' })
+        res.status(201).json({ success: true, data: { createdCard }, message: 'Card successfully created' })
     } catch (error) {
         await session.abortTransaction()
         res.status(400).json({ success: false, message: error.message })

@@ -8,10 +8,13 @@ import corsOptions from './src/config/cors.js'
 import dotenvConfig from './src/config/env.js'
 
 const app = express()
+const upload = multer()
 dotenvConfig()
 await connectDB()
-app.use('/api/v1', cardRoutes)
 app.use(cors(corsOptions))
+app.use(express.json())
+app.use(upload.array())
+app.use('/api/v1', cardRoutes)
 
 app.listen(process.env.PORT, () => {
     console.log(`The server is running on: http://localhost:${process.env.PORT}`)
