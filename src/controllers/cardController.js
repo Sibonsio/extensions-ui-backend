@@ -60,3 +60,14 @@ export const createCard = async (req, res) => {
     }
 
 }
+export const updateCardById = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { logo, name, description, isActive } = req.body
+        const updateCard = await cardModel.findById(id, { logo, name, description, isActive }, { new: true })
+        res.status(200).json({ success: true, data: { updateCard }, message: 'Card successfully updated' })
+    } catch (error) {
+        res.status(404).json({ success: false, message: error.message })
+    }
+
+}
