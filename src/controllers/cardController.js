@@ -33,6 +33,16 @@ export const getInactiveCards = async (req, res) => {
     }
 
 }
+export const getCardById = async (req, res) => {
+    try {
+        const { id } = req.params
+        const card = await cardModel.findById(id)
+        res.status(200).json({ success: true, data: { card }, message: 'Card successfully retrieved' })
+    } catch (error) {
+        res.status(404).json({ success: false, message: error.message })
+    }
+
+}
 export const createCard = async (req, res) => {
     const session = await mongoose.startSession()
     session.startTransaction()
