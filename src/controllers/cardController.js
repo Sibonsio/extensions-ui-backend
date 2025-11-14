@@ -33,16 +33,6 @@ export const getInactiveCards = async (req, res) => {
     }
 
 }
-export const getCardById = async (req, res) => {
-    try {
-        const { id } = req.params
-        const card = await cardModel.findById(id)
-        res.status(200).json({ success: true, data: { card }, message: 'Card successfully retrieved' })
-    } catch (error) {
-        res.status(404).json({ success: false, message: error.message })
-    }
-
-}
 export const createCard = async (req, res) => {
     const session = await mongoose.startSession()
     session.startTransaction()
@@ -64,8 +54,18 @@ export const updateCardById = async (req, res) => {
     try {
         const { id } = req.params
         const { logo, name, description, isActive } = req.body
-        const updateCard = await cardModel.findByIdAndUpdate(id, { logo, name, description, isActive }, { new: true })
+        const updateCard = await cardModel.findByIdAndUpdate(id, { logo, name, description, isActive: !isActive }, { new: true })
         res.status(200).json({ success: true, data: { updateCard }, message: 'Card successfully updated' })
+    } catch (error) {
+        res.status(404).json({ success: false, message: error.message })
+    }
+
+}
+export const deleteCard = async (req, res) => {
+    try {
+        const { id } = req.params
+        const deleteCard = await cardModel.findByIdAndDelete(id)
+        res.status(200).json({ success: true, data: { deleteCard }, message: 'Card successfully deleted' })
     } catch (error) {
         res.status(404).json({ success: false, message: error.message })
     }
