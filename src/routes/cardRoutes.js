@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { getAllCards, getActiveCards, getInactiveCards, createCard, updateCardById, deleteCard } from "../controllers/cardController.js";
 import multer from "multer";
+import path from 'path'
 
 
 const cardRoutes = Router();
-const uploadPath = process.env.PATH
+const uploadPath = './public'
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadPath)

@@ -37,14 +37,15 @@ export const createCard = async (req, res) => {
     const session = await mongoose.startSession()
     session.startTransaction()
     try {
-        const { logo, name, description, isActive } = req.body
-        const createdCard = new cardModel({ logo, name, description, isActive })
+        const { name, description, isActive } = req.body
+        const image = req.file
+        const createdCard = new cardModel({ image, name, description, isActive })
         await createdCard.save({ session })
         await session.commitTransaction()
         res.status(201).json({ success: true, data: { createdCard }, message: 'Card successfully created' })
     } catch (error) {
         await session.abortTransaction()
-        res.status(400).json({ success: false, message: error.message })
+        res.status(400).json({ success: false, message: error })
     } finally {
         session.endSession()
     }
@@ -53,11 +54,13 @@ export const createCard = async (req, res) => {
 export const updateCardById = async (req, res) => {
     try {
         const { id } = req.params
-        const { logo, name, description, isActive } = req.body
-        const updateCard = await cardModel.findByIdAndUpdate(id, { logo, name, description, isActive: (!isActive) }, { new: true })
+        const { name, description, isActive } = req.body
+        const image = req.file
+        const updateCard = await cardModel.findByIdAndUpdate(id, { image, name, description, isActive: (!isActive) }, { new: true })
         res.status(200).json({ success: true, data: { updateCard }, message: 'Card successfully updated' })
     } catch (error) {
         res.status(404).json({ success: false, message: error.message })
+
     }
 
 }
